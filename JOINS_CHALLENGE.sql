@@ -395,24 +395,7 @@ INNER JOIN DimProductSubcategory PS
 INNER JOIN DimProductCategory PC
 	ON PS.ProductCategoryKey = PC.ProductCategoryKey
 
-/***********************************************
-1. Mahsulot va uning Brend hujjati (INNER JOIN)
-DimProduct jadvalini o'z ichiga olgan va undagi mahsulot nomi (EnglishProductName) hamda ushbu mahsulot qaysi modelga tegishli ekanligini ko'rsating. Ammo faqat ProductSubcategoryKey qiymati mavjud bo'lgan (NULL bo'lmagan) mahsulotlarni chiqaring.
-
-2. Sotuvlar va Xaridorlar hududi (Multiple INNER JOIN)
-FactInternetSales jadvalidan xaridlar ro'yxatini chiqaring. Menga sotuv raqami (SalesOrderNumber), xaridorning ismi-familiyasi, va u yashayotgan davlat nomi (EnglishCountryRegionName) kerak.
-
-Yordam: FactInternetSales -> DimCustomer -> DimGeography
-
-3. Sotilmagan Aksessuarlar (LEFT JOIN va Filtrlash)
-Barcha mahsulot kichik kategoriyalarini (DimProductSubcategory) va ularga tegishli mahsulotlarni (DimProduct) bog'lang. Bizga faqat hech qanday mahsulot biriktirilmagan subkategoriyalar nomi (EnglishProductSubcategoryName) kerak.
-
-4. Ombordagi mahsulotlar holati (INNER JOIN)
-FactProductInventory (Ombor qoldiqlari) jadvalini DimProduct bilan bog'lang. Ombordagi har bir yozuv uchun mahsulotning inglizcha nomi (EnglishProductName), birlik narxi (UnitPrice) va ombordagi qoldiq miqdorini (UnitsBalance) chiqaring.
-
-5. Buyurtma va Yetkazib berish sanalari (Double Join qayta takrorlash)
-FactInternetSales jadvalidagi sotuvlar uchun buyurtma berilgan sana (OrderDateKey) va xaridorga yetkazib berilgan haqiqiy sanani (ShipDateKey) DimDate jadvali bilan ikki marta bog'lang. Natijada SalesOrderNumber, OrderDate (Calendar hierarchy yoki FullDateAlternateKey) va ShipDate ustunlari ko'rinsin. (Faqat INNER JOIN ishlating).
-***********************************************/
+-- JUST CHALLENGES
 -- 1
 SELECT
 	P.EnglishProductName,
@@ -460,28 +443,8 @@ INNER JOIN DimDate D1
 	ON FIS.OrderDateKey = D1.DateKey
 INNER JOIN DimDate D2
 	ON FIS.ShipDateKey = D2.DateKey
-/**************************************************
-1. The High-Value European Sales
-Find all internet sales (FactInternetSales) made to customers living in Europe (e.g., France or Germany). Display the SalesOrderNumber, the customer's LastName, the country name (EnglishCountryRegionName), and the SalesAmount. Filter the results to only show transactions where the SalesAmount is greater than $1,000.
 
-2. Discontinued Products in Orders
-Management wants to check if we are still shipping old inventory. Write a query joining FactInternetSales with DimProduct. Display the SalesOrderNumber, EnglishProductName, and the Status column from DimProduct. Filter the rows so you only see products where the Status is equal to 'Current' (meaning they are not discontinued).
-
-3. Black & Silver Mountain Bikes
-Let's link three tables: DimProduct, DimProductSubcategory, and DimProductCategory.
-List the EnglishProductName, Color, EnglishProductSubcategoryName, and EnglishProductCategoryName.
-Filter the results to show only products where the category is 'Bikes' AND the product color is either 'Black' or 'Silver'.
-
-4. Overdue Shipments
-Sometimes orders take too long to ship. Write a query on FactInternetSales. Join DimDate as OrderDate and join DimDate again as ShipDate.
-Display the SalesOrderNumber, the OrderDate.FullDateAlternateKey, and the ShipDate.FullDateAlternateKey.
-Filter the results to only show orders where the ShipDateKey is greater than the DueDateKey (meaning it was shipped past its deadline).
-
-5. North American Reseller Contact List
-We need a mailing list for our resellers (DimReseller) in the 'Northwest' or 'Southwest' regions. Join DimReseller with DimGeography and DimSalesTerritory.
-Display the ResellerName, Phone, City, and SalesTerritoryRegion. Filter the results to only show those two regions.
-**************************************************/
-
+-- Second
 -- 1
 SELECT
 	FIS.SalesOrderNumber,
@@ -496,49 +459,52 @@ INNER JOIN DimGeography G
 WHERE FIS.SalesAmount > 1000
 
 -- 2
-SELECT
-	FIS.SalesOrderNumber,
-	P.EnglishProductName,
-	P.Status
-FROM FactInternetSales FIS
-INNER JOIN DimProduct P
-	ON FIS.ProductKey = P.ProductKey
-WHERE P.Status = 'Current'
 
--- 3
-SELECT
-	P.EnglishProductName,
-	P.Color,
-	PS.EnglishProductSubcategoryName,
-	PC.EnglishProductCategoryName
-FROM DimProduct P
-INNER JOIN DimProductSubcategory PS
-	ON P.ProductSubcategoryKey = PS.ProductSubcategoryKey
-INNER JOIN DimProductCategory PC
-	ON PS.ProductCategoryKey = PC.ProductCategoryKey
-WHERE (PC.EnglishProductCategoryName = 'Bikes' AND P.Color IN ('Black','Silver'))
-
--- 4
-SELECT
-	FIS.SalesOrderNumber,
-	O.FullDateAlternateKey AS CalendarOrderDate,
-	SH.FullDateAlternateKey AS CalendarShipDate
-FROM FactInternetSales FIS
-INNER JOIN DimDate O
-	ON FIS.OrderDateKey = O.DateKey
-INNER JOIN DimDate SH
-	ON FIS.ShipDateKey = SH.DateKey
-WHERE FIS.ShipDateKey > FIS.DueDateKey
-
--- 5
+-- MORE CHALLENGES 
+-- EASY
+-- 1
 SELECT
 	R.ResellerName,
-	R.Phone,
-	G.City,
-	ST.SalesTerritoryRegion
+	G.EnglishCountryRegionName,
+	G.City
 FROM DimReseller R
 INNER JOIN DimGeography G
 	ON R.GeographyKey = G.GeographyKey
+
+-- EXEC sp_help 'DimReseller';
+
+-- 2
+SELECT
+	FIS.SalesOrderNumber,
+	FIS.SalesAmount
+FROM FactInternetSales FIS
 INNER JOIN DimSalesTerritory ST
-	ON G.SalesTerritoryKey = ST.SalesTerritoryKey
-WHERE ST.SalesTerritoryRegion IN ('Northwest','Southwest')
+	ON FIS.SalesTerritoryKey = ST.SalesTerritoryKey
+WHERE ST.SalesTerritoryCountry = 'Australia'
+
+-- 3
+SELECT * FROM DimProduct
+SELECT * FROM DimProductSubcategory
+SELECT * FROM DimProduct P
+LEFT JOIN DimProductSubcategory PS
+	ON P.ProductSubcategoryKey = PS.ProductSubcategoryKey
+WHERE PS.ProductSubcategoryKey IS NULL
+
+--MEDIUM
+-- 1
+SELECT
+	DISTINCT R.ResellerName,
+	G.City,
+	G.EnglishCountryRegionName
+FROM FactResellerSales FRS
+INNER JOIN DimReseller R
+	ON FRS.ResellerKey = R.ResellerKey
+INNER JOIN DimGeography G
+	ON R.GeographyKey = G.GeographyKey
+INNER JOIN DimSalesTerritory ST
+	ON FRS.SalesTerritoryKey = ST.SalesTerritoryKey
+
+-- 2
+SELECT * FROM FactInternetSales
+SELECT * FROM DimDate
+
