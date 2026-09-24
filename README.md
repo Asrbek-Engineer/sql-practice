@@ -1,4 +1,6 @@
-\# DE-Obsession-Path
+# SQL Practice
 
-Mening Data Engineering sari bosib o'tadigan amaliy yo'lim.
+My SQL practice while following Data with Baraa's SQL course (SQL Server).
+Each file covers one topic with exercises and my solutions.
 
+Topics: basics, filtering, joins, set operators, aggregates.
