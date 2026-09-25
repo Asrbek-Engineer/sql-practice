@@ -29,5 +29,6 @@ INSERT INTO customers VALUES (1, 'Ali', 'UZ'), (2, 'Vali', 'KZ'), (3, 'Anna', 'D
 INSERT INTO employees VALUES (1, 'Ali', 'IT'), (2, 'Olga', 'HR');
 INSERT INTO orders VALUES (101, 1), (102, 2);
 INSERT INTO orders_archive VALUES (90, 1), (91, 1), (92, 3);
+INSERT INTO customers VALUES (4, 'Sara', 'UZ');
 
 SELECT * FROM customers;
