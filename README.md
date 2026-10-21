@@ -1,24 +1,28 @@
-# SQL Practice
+# SQL Practice — T-SQL Learning Path
 
-My daily SQL practice log while learning Data Engineering.
-Course: SQL Ultimate Course by Data with Baraa (SQL Server / T-SQL).
+A structured record of my SQL Server learning path toward Data Engineering:
+lesson notes, practice exercises (with my own corrections), LeetCode solutions and spaced-repetition reviews.
 
 ## Structure
 
-| Folder | Topics |
+| Folder | Topic |
 |---|---|
-| `01_query_basics` | SELECT, DISTINCT, WHERE, ORDER BY, GROUP BY, HAVING, TOP |
-| `02_ddl_dml` | CREATE, ALTER, DROP, INSERT, UPDATE, DELETE, TRUNCATE |
-| `03_filtering` | Comparison, logical, range, membership and search operators |
-| `04_joins` | Multi-table joins, anti joins |
-| `05_set_operators` | UNION, UNION ALL, EXCEPT, INTERSECT, delta detection |
-| `06_string_functions` | CONCAT, TRIM, REPLACE, LEN, LEFT, RIGHT, SUBSTRING, ROUND, ABS |
-| `07_date_functions` | DATEPART, DATENAME, DATETRUNC, EOMONTH, FORMAT, CONVERT, CAST, DATEADD, DATEDIFF, ISDATE |
-| `08_null_functions` | IS NULL, COALESCE, ISNULL, NULLIF |
-| `leetcode` | Solved LeetCode SQL problems |
-| `reviews` | Spaced-repetition reviews written from memory |
+| 01–03 | Query basics, DDL/DML, filtering |
+| 04–05 | Joins, set operators |
+| 06–08 | String, date and NULL functions |
+| 09 | CASE WHEN |
+| 10 | Window functions (aggregate, ranking, value) |
+| 11–12 | Subqueries, CTEs (incl. recursive) |
+| 13–15 | Views, CTAS & temp tables, stored procedures |
+| 16 | Indexes, execution plans, columnstore vs rowstore |
+| 17 | SQL final test (mixed topics, timed, no notes) |
+| 18 | Partitioning |
+| leetcode | LeetCode SQL solutions |
+| reviews | Spaced-repetition review sessions |
 
-## Notes
+## Databases
+- `SalesDB` — main practice database
+- `AdventureWorksDW` — indexing and performance experiments
 
-Each file contains the task in English as a comment, followed by my solution.
-Mistakes and lessons learned are documented as comments (e.g. integer division, NULL handling, LEN vs DATALENGTH).
+## Tools
+SQL Server Express · SSMS · Git
