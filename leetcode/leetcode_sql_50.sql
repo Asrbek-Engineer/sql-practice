@@ -109,27 +109,29 @@ group by p.product_id
 
 -- 175. Combine Two Tables
 -- https://leetcode.com/problems/combine-two-tables/description/
-SELECT
-    P.firstName,
-    P.lastName,
-    A.city,
-    A.state
-FROM Person P
-LEFT JOIN Address A
-    ON P.personId = A.personId
+select
+    p.firstname,
+    p.lastname,
+    a.city,
+    a.state
+from person p
+left join address a
+    on p.personid = a.personid
+
 -- 183. Customers Who Never Order
 -- https://leetcode.com/problems/customers-who-never-order/
-SELECT 
-    C.name AS Customers
-FROM Customers C
-LEFT JOIN Orders O
-    ON C.id = O.customerId
-WHERE O.id IS NULL
+select
+    c.name as customers
+from customers c
+left join orders o
+    on c.id = o.customerid
+where o.id is null
+
 -- 181. Employees Earning More Than Their Managers
 -- https://leetcode.com/problems/employees-earning-more-than-their-managers/
-SELECT 
-    E1.name AS Employee
-FROM Employee E1
-LEFT JOIN Employee E2
-    ON E1.managerId = E2.id
-WHERE E1.salary > E2.salary
+select
+    e1.name as employee
+from employee e1
+inner join employee e2
+    on e1.managerid = e2.id
+where e1.salary > e2.salary
