@@ -28,13 +28,15 @@ where w.area >= 3000000 or w.population >= 25000000
 -- https://leetcode.com/problems/article-views-i/description/?envType=study-plan-v2&envId=top-sql-50
 select distinct v.author_id as id
 from views v
-where v.author_id = v.viewer_id and v.viewer_id > 1
+where v.author_id = v.viewer_id
+order by id
 
 -- 1683. Invalid Tweets
+-- https://leetcode.com/problems/invalid-tweets/?envType=study-plan-v2&envId=top-sql-50
 select
     tweet_id 
 from tweets
-where datalength(content) > 15
+where len(content) > 15
 
 -- 1378. Replace Employee ID With The Unique Identifier
 -- https://leetcode.com/problems/replace-employee-id-with-the-unique-identifier/description/?envType=study-plan-v2&envId=top-sql-50
@@ -100,3 +102,34 @@ left join unitssold as u
     on p.product_id = u.product_id
 where u.purchase_date between p.start_date and p.end_date or u.product_id is null
 group by p.product_id
+
+-- =================
+-- other problems (not in SQL 50)
+-- =================
+
+-- 175. Combine Two Tables
+-- https://leetcode.com/problems/combine-two-tables/description/
+SELECT
+    P.firstName,
+    P.lastName,
+    A.city,
+    A.state
+FROM Person P
+LEFT JOIN Address A
+    ON P.personId = A.personId
+-- 183. Customers Who Never Order
+-- https://leetcode.com/problems/customers-who-never-order/
+SELECT 
+    C.name AS Customers
+FROM Customers C
+LEFT JOIN Orders O
+    ON C.id = O.customerId
+WHERE O.id IS NULL
+-- 181. Employees Earning More Than Their Managers
+-- https://leetcode.com/problems/employees-earning-more-than-their-managers/
+SELECT 
+    E1.name AS Employee
+FROM Employee E1
+LEFT JOIN Employee E2
+    ON E1.managerId = E2.id
+WHERE E1.salary > E2.salary
