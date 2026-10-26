@@ -121,6 +121,17 @@ where activity_date > dateadd(day, -30, '2019-07-27')
     and activity_date <= '2019-07-27'
 group by activity_date
 
+-- 1075. Project Employees I
+-- https://leetcode.com/problems/project-employees-i/?envType=study-plan-v2&envId=top-sql-50
+select
+    p.project_id,
+    cast(avg(cast(e.experience_years as decimal(10, 2))) as decimal(10, 2)) as average_years
+from project as p
+inner join employee as e
+    on p.employee_id = e.employee_id 
+group by p.project_id
+order by p.project_id
+
 -- =================
 -- other problems (not in SQL 50)
 -- =================
