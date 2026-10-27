@@ -132,6 +132,15 @@ inner join employee as e
 group by p.project_id
 order by p.project_id
 
+-- 1633. Percentage of Users Attended a Contest
+-- https://leetcode.com/problems/percentage-of-users-attended-a-contest/description/?envType=study-plan-v2&envId=top-sql-50
+select
+    contest_id,
+    cast(100.0 * count(*) / (select count(*) from users) as decimal(10, 2)) as percentage
+from register
+group by contest_id
+order by percentage desc, contest_id
+
 -- =================
 -- other problems (not in SQL 50)
 -- =================
