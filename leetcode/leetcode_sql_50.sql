@@ -141,6 +141,30 @@ from register
 group by contest_id
 order by percentage desc, contest_id
 
+-- 1211. Queries Quality and Percentage
+-- https://leetcode.com/problems/queries-quality-and-percentage/?envType=study-plan-v2&envId=top-sql-50
+-- v1 (my solution): correlated subquery, reads the table once per group
+select
+    q.query_name,
+    cast(sum(cast(rating as decimal(10, 2)) / cast(q.position as decimal(10, 2))) / count(q.query_name) as decimal(10, 2)) as quality,
+    cast(100.0 * (
+        select count(q2.rating)
+        from queries as q2
+        where q2.rating < 3 and q.query_name = q2.query_name
+    ) / cast(count(q.query_name) as decimal(10, 2)) as decimal(10, 2)) as poor_query_percentage
+from queries as q
+group by q.query_name;
+
+-- v2 (improved): conditional aggregation, one pass over the table
+-- pattern: share of rows matching a condition = avg(case when condition then 1 else 0 end)
+select
+    query_name,
+    cast(avg(cast(rating as decimal(10, 2)) / position) as decimal(10, 2)) as quality,
+    cast(avg(case when rating < 3 then 100.0 else 0 end) as decimal(10, 2)) as poor_query_percentage
+from queries
+where query_name is not null
+group by query_name;
+
 -- =================
 -- other problems (not in SQL 50)
 -- =================
