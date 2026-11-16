@@ -165,6 +165,21 @@ from queries
 where query_name is not null
 group by query_name;
 
+-- 180. Consecutive Numbers
+-- https://leetcode.com/problems/consecutive-numbers/?envType=study-plan-v2&envId=top-sql-50
+-- idea: a number appears 3 times in a row if it equals both the previous and the next row (lag + lead)
+select
+    distinct ConsecutiveNums
+from (
+    select
+        case
+            when num = lag(num) over(order by id)
+             and num = lead(num) over(order by id) then num
+        end as ConsecutiveNums
+    from Logs
+) t
+where ConsecutiveNums is not null
+
 -- =================
 -- other problems (not in SQL 50)
 -- =================
@@ -197,3 +212,19 @@ from employee e1
 inner join employee e2
     on e1.managerid = e2.id
 where e1.salary > e2.salary
+
+-- 178. Rank Scores
+-- https://leetcode.com/problems/rank-scores/
+-- v1 (my solution): dense_rank is correct (no gaps after ties: 1, 2, 2, 3)
+select
+    score,
+    dense_rank() over(order by score desc) as rank
+from Scores
+
+-- v2 (fixed): the window order by only numbers the rows,
+-- the final order by sorts the result (required by the task)
+select
+    score,
+    dense_rank() over(order by score desc) as [rank]
+from Scores
+order by score desc
