@@ -180,6 +180,27 @@ from (
 ) t
 where ConsecutiveNums is not null
 
+-- 1729. Find Followers Count
+-- https://leetcode.com/problems/find-followers-count/?envType=study-plan-v2&envId=top-sql-50
+select
+    user_id,
+    count(follower_id) as followers_count
+from Followers
+group by user_id
+order by user_id
+
+-- 619. Biggest Single Number
+-- https://leetcode.com/problems/biggest-single-number/?envType=study-plan-v2&envId=top-sql-50
+select
+    max(num) as num
+from(
+    select
+        num
+    from MyNumbers
+    group by num
+    having count(num) = 1
+)t
+
 -- =================
 -- other problems (not in SQL 50)
 -- =================
